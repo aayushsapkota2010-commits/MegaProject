@@ -1,0 +1,21 @@
+# Backend (Spring Boot)
+target/
+*.jar
+*.class
+.idea/
+*.iml
+.mvn/
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+
+# Frontend (React/Vite)
+frontend/node_modules/
+frontend/dist/
+
+# Env files
+.env
