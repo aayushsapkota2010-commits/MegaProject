@@ -2,16 +2,9 @@ FROM eclipse-temurin:17
 
 WORKDIR /app
 
-COPY gradlew .
-COPY gradle gradle
-COPY build.gradle .
-COPY settings.gradle .
+COPY . .
 
 RUN chmod +x gradlew
-
-RUN ./gradlew dependencies
-
-COPY src src
 
 RUN ./gradlew build -x test
 
