@@ -86,10 +86,11 @@ public class SecurityConfig {
         CorsConfiguration configuration =
                 new CorsConfiguration();
 
-        configuration.setAllowedOriginPatterns(
-                List.of("*")
-        );
-
+    configuration.setAllowedOrigins(
+        List.of(
+                "https://edusphere-frontend.onrender.com"
+        )
+);
         configuration.setAllowedMethods(
                 List.of("*")
         );
