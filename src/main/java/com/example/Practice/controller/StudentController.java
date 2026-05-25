@@ -41,7 +41,7 @@ public class StudentController {
     public List<Student> getAllStudent() {
         return studentService.getAllStudents();
     }
- @PostMapping
+@PostMapping
 public ResponseEntity<ApiResponse<Student>> saveStudent(
         @Valid @RequestBody StudentDTO studentDTO) {
 
@@ -50,7 +50,8 @@ public ResponseEntity<ApiResponse<Student>> saveStudent(
     student.setName(studentDTO.getName());
     student.setEmail(studentDTO.getEmail());
     student.setCourse(studentDTO.getCourse());
-    student.setDepartment(studentDTO.getDepartment());
+
+    // student.setDepartment(studentDTO.getDepartment());
 
     Student savedStudent = studentService.saveStudent(student);
 

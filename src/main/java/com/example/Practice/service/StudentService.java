@@ -21,24 +21,16 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepo;
 
-    @Autowired
-private DepartmentRepository departmentRepository;
+
 
 private static final Logger logger =
         LoggerFactory.getLogger(StudentService.class);
+public Student saveStudent(Student student)
+{
+    logger.info("Saving student: {}", student.getName());
 
-    public Student saveStudent(Student student)
-    {
-        Department department = departmentRepository
-        .findByName(student.getCourse())
-        .orElseThrow(() -> new RuntimeException("Department not found"));
-
-student.setDepartment(department);
-
-logger.info("Saving student: {}", student.getName());
-        return studentRepo.save(student);
-
-    }
+    return studentRepo.save(student);
+}
 
     public List<Student> getAllStudents()
     {
