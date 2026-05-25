@@ -30,14 +30,14 @@ private JwtService jwtService;
 
     return userRepository.save(user);
 }
-    public String loginUser(LoginRequest loginRequest) {
+   public String loginUser(LoginRequest loginRequest) {
 
     Optional<User> optionalUser =
             userRepository.findByEmail(loginRequest.getEmail());
 
     if (optionalUser.isEmpty()) {
 
-        return "User not found";
+        throw new RuntimeException("User not found");
     }
 
     User user = optionalUser.get();
@@ -50,12 +50,12 @@ private JwtService jwtService;
 
     if (!isPasswordCorrect) {
 
-        return "Invalid Password";
+        throw new RuntimeException("Invalid Password");
     }
 
-return jwtService.generateToken(
-        user.getEmail(),
-        user.getRole()
-);
+    return jwtService.generateToken(
+            user.getEmail(),
+            user.getRole()
+    );
 }
 }

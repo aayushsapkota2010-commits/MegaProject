@@ -43,9 +43,18 @@ function Login() {
 
             );
 
-            const token = response.data;
+     const token = response.data;
 
-            localStorage.setItem("token", token);
+if (
+    token === "User not found" ||
+    token === "Invalid Password"
+) {
+
+    toast.error(token);
+    return;
+}
+
+localStorage.setItem("token", token);
             setLoading(false);
 
             toast.success("Login Successful 😄🔥");

@@ -38,14 +38,23 @@ private PasswordEncoder passwordEncoder;
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
     
-    @PostMapping("/login")
-public ResponseEntity<String> loginUser(
+@PostMapping("/login")
+public ResponseEntity<?> loginUser(
         @RequestBody LoginRequest loginRequest) {
 
-    String response =
-            userService.loginUser(loginRequest);
+    try {
 
-    return ResponseEntity.ok(response);
+        String token =
+                userService.loginUser(loginRequest);
+
+        return ResponseEntity.ok(token);
+
+    } catch (Exception e) {
+
+        return ResponseEntity
+                .badRequest()
+                .body(e.getMessage());
+    }
 }
 
 
