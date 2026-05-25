@@ -41,47 +41,45 @@ public class SecurityConfig {
 
         return new BCryptPasswordEncoder();
     }
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http)
+        throws Exception {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)
-            throws Exception {
+    http
 
-        http
+        .csrf(csrf -> csrf.disable())
 
-                .csrf(csrf -> csrf.disable())
+        .cors(cors -> {})
 
-                .cors(Customizer.withDefaults())
-
-                .authorizeHttpRequests(auth -> auth
-
-    .requestMatchers(
-        "/auth/**",
-        "/otp/**"
-    ).permitAll()
-
-    .requestMatchers("/students/**")
-    .hasAnyRole("USER", "ADMIN")
-
-    .anyRequest()
-    .authenticated()
-)
-
-                .sessionManagement(session -> session
-
-                        .sessionCreationPolicy(
-                                SessionCreationPolicy.STATELESS
-                        )
+        .sessionManagement(session ->
+                session.sessionCreationPolicy(
+                        SessionCreationPolicy.STATELESS
                 )
+        )
 
-                .addFilterBefore(
-                        jwtFilter,
-                        UsernamePasswordAuthenticationFilter.class
-                )
+        .authorizeHttpRequests(auth -> auth
 
-                .formLogin(form -> form.disable());
+                .requestMatchers(
+                        "/auth/**",
+                        "/otp/**"
+                ).permitAll()
 
-        return http.build();
-    }
+                .requestMatchers("/students/**")
+                .permitAll()
+
+                .anyRequest()
+                .authenticated()
+        )
+
+        .addFilterBefore(
+                jwtFilter,
+                UsernamePasswordAuthenticationFilter.class
+        )
+
+        .formLogin(form -> form.disable());
+
+    return http.build();
+}
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
