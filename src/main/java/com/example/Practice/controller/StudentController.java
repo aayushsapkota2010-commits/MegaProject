@@ -82,13 +82,7 @@ public ResponseEntity<ApiResponse<Student>> getStudentById(@PathVariable Long id
         
         return ResponseEntity.ok(updatedStudent);
     }
-@PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteStudent(@PathVariable Long id)
-    {
-        studentService.deleteStudent(id);
-        return ResponseEntity.ok("Student Deleted Successfully");
-    }
+
     
 @GetMapping("/pagination")
 public ResponseEntity<Page<Student>> getStudentsWithPagination(Pageable pageable) {
