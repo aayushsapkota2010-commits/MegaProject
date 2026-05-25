@@ -18,14 +18,18 @@ private BCryptPasswordEncoder passwordEncoder;
 
 @Autowired
 private JwtService jwtService;
-    public User registerUser(User user)
-    {
-         user.setRole("USER");
-         user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public User registerUser(User user) {
 
-        return userRepository.save(user);  
-      }
-    
+    if(user.getRole() == null) {
+        user.setRole("USER");
+    }
+
+    user.setPassword(
+        passwordEncoder.encode(user.getPassword())
+    );
+
+    return userRepository.save(user);
+}
     public String loginUser(LoginRequest loginRequest) {
 
     Optional<User> optionalUser =

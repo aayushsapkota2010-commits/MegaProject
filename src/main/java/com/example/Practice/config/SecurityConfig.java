@@ -54,14 +54,17 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers(
-                                "/auth/**",
-                                "/otp/**"
-                        ).permitAll()
+    .requestMatchers(
+        "/auth/**",
+        "/otp/**"
+    ).permitAll()
 
-                        .anyRequest()
-                        .authenticated()
-                )
+    .requestMatchers("/students/**")
+    .hasAnyRole("USER", "ADMIN")
+
+    .anyRequest()
+    .authenticated()
+)
 
                 .sessionManagement(session -> session
 
