@@ -124,5 +124,12 @@ getStudentsByCourseNative(@RequestParam String course) {
 
     return ResponseEntity.ok(studentService.getStudentsByCourseNative(course));
 }
+@DeleteMapping("/{id}")
+public ResponseEntity<String> deleteStudent(
+        @PathVariable Long id) {
 
+    studentService.deleteStudent(id);
+
+    return ResponseEntity.ok("Student Deleted");
+}
 }
