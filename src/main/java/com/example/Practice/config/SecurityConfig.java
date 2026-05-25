@@ -1,20 +1,30 @@
 package com.example.Practice.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+import com.example.Practice.security.JwtFilter;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.example.Practice.security.JwtFilter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import org.springframework.security.config.Customizer;
+
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+
+import org.springframework.security.config.http.SessionCreationPolicy;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import org.springframework.security.web.SecurityFilterChain;
+
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 import org.springframework.web.cors.CorsConfiguration;
+
 import org.springframework.web.cors.CorsConfigurationSource;
+
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
@@ -24,7 +34,7 @@ import java.util.List;
 public class SecurityConfig {
 
     @Autowired
-private JwtFilter jwtFilter;
+    private JwtFilter jwtFilter;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -32,71 +42,72 @@ private JwtFilter jwtFilter;
         return new BCryptPasswordEncoder();
     }
 
-    
-@Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity http)
-        throws Exception {
-http
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http)
+            throws Exception {
 
-    .csrf(csrf -> csrf.disable())
+        http
 
-    .cors(cors -> {})
+                .csrf(csrf -> csrf.disable())
 
-    .authorizeHttpRequests(auth -> auth
+                .cors(Customizer.withDefaults())
 
-        .requestMatchers(
-            "/auth/**",
-            "/otp/**"
-        ).permitAll()
+                .authorizeHttpRequests(auth -> auth
 
-        .anyRequest()
-        .authenticated()
-    )
+                        .requestMatchers(
+                                "/auth/**",
+                                "/otp/**"
+                        ).permitAll()
 
-            .sessionManagement(session -> session
+                        .anyRequest()
+                        .authenticated()
+                )
 
-                    .sessionCreationPolicy(
-                            SessionCreationPolicy.STATELESS
-                    )
-            )
+                .sessionManagement(session -> session
 
-            .addFilterBefore(
-                    jwtFilter,
-                    UsernamePasswordAuthenticationFilter.class
-            )
+                        .sessionCreationPolicy(
+                                SessionCreationPolicy.STATELESS
+                        )
+                )
 
-            .formLogin(form -> form.disable());
+                .addFilterBefore(
+                        jwtFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                )
 
-    return http.build();
-}
-@Bean
-public CorsConfigurationSource corsConfigurationSource() {
+                .formLogin(form -> form.disable());
 
-    CorsConfiguration configuration =
-            new CorsConfiguration();
+        return http.build();
+    }
 
-    configuration.setAllowedOrigins(
-            List.of("http://localhost:5173")
-    );
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
 
-    configuration.setAllowedMethods(
-            List.of("*")
-    );
+        CorsConfiguration configuration =
+                new CorsConfiguration();
 
-    configuration.setAllowedHeaders(
-            List.of("*")
-    );
+        configuration.setAllowedOriginPatterns(
+                List.of("*")
+        );
 
-    configuration.setAllowCredentials(true);
+        configuration.setAllowedMethods(
+                List.of("*")
+        );
 
-    UrlBasedCorsConfigurationSource source =
-            new UrlBasedCorsConfigurationSource();
+        configuration.setAllowedHeaders(
+                List.of("*")
+        );
 
-    source.registerCorsConfiguration(
-            "/**",
-            configuration
-    );
+        configuration.setAllowCredentials(true);
 
-    return source;
-}
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration(
+                "/**",
+                configuration
+        );
+
+        return source;
+    }
 }
